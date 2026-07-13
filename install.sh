@@ -21,7 +21,7 @@ mkdir -p /usr/local/x-ui/sub_templates
 
 TMP=$(mktemp)
 
-curl -fsSL https://raw.githubusercontent.com/USERNAME/REPOSITORY/main/template.html -o "$TMP"
+curl -fsSL https://raw.githubusercontent.com/Safe-Net5/Safe-Sub/main/template.html -o "$TMP"
 
 sed -i "s|Safe.Vpn|$BRAND|g" "$TMP"
 sed -i "s|VpnSafee_bot|$BOT|g" "$TMP"
