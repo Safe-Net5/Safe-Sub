@@ -38,8 +38,19 @@ if [[ ! "$confirm" =~ ^[Yy]$ ]]; then
     exit 1
 fi
 
-DEST_FILE="/usr/local/x-ui/sub_templates/custom"
-sudo mkdir -p /usr/local/x-ui/sub_templates
+# ============================================================
+# مسیر جدید: /usr/local/x-ui/sub_templates/safevpn
+# ============================================================
+DEST_DIR="/usr/local/x-ui/sub_templates/safevpn"
+DEST_FILE="${DEST_DIR}/index.html"
+
+echo ""
+echo -e "${BLUE}Creating directory: ${DEST_DIR}${NC}"
+sudo mkdir -p "$DEST_DIR"
+echo -e "${GREEN}Directory ready${NC}"
+
+echo ""
+echo -e "${BLUE}Building custom template...${NC}"
 
 sudo tee "$DEST_FILE" > /dev/null << EOF
 <!DOCTYPE html>
@@ -712,5 +723,11 @@ EOF
 sudo chmod 644 "$DEST_FILE"
 
 echo ""
-echo "SUCCESS! File created: $DEST_FILE"
-echo "Next step: Enable custom template in X-UI panel"
+echo -e "${GREEN}=========================================${NC}"
+echo -e "${GREEN}SUCCESS! File created:${NC}"
+echo -e "${CYAN}${DEST_FILE}${NC}"
+echo -e "${GREEN}=========================================${NC}"
+echo ""
+echo -e "${YELLOW}Now go to X-UI panel -> Settings -> Subscription Settings${NC}"
+echo -e "${YELLOW}Set template path to: ${CYAN}/usr/local/x-ui/sub_templates/safevpn${NC}"
+echo ""
