@@ -1,4 +1,4 @@
-# Safe-Sub | قالب اشتراک سفارشی برای 3x-ui
+# Safe-Sub | 3x-ui قالب اشتراک سفارشی برای
 
 <div align="center">
 
