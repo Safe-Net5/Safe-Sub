@@ -1,9 +1,5 @@
 #!/bin/bash
 
-# ============================================================
-# X-UI Custom Template Installer - Safe-Sub
-# ============================================================
-
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
 BLUE='\033[0;34m'
@@ -12,101 +8,46 @@ RED='\033[0;31m'
 NC='\033[0m'
 
 clear
-
 echo -e "${BLUE}╔════════════════════════════════════════════════════════════╗${NC}"
-echo -e "${BLUE}║                                                            ║${NC}"
-echo -e "${BLUE}║        ${CYAN}X-UI Custom Template Installer${BLUE}                     ║${NC}"
-echo -e "${BLUE}║              ${CYAN}Safe-Sub${BLUE}                                     ║${NC}"
-echo -e "${BLUE}║                                                            ║${NC}"
+echo -e "${BLUE}║        X-UI Custom Template Installer - Safe-Sub         ║${NC}"
 echo -e "${BLUE}╚════════════════════════════════════════════════════════════╝${NC}"
 echo ""
 
-# Get Input Function
-get_input() {
-    local prompt="$1"
-    local default="$2"
-    local input_var
-    
-    if [ -n "$default" ]; then
-        echo -e "${YELLOW}${prompt}${NC} ${CYAN}[default: ${default}]${NC}: "
-    else
-        echo -e "${YELLOW}${prompt}${NC}: "
-    fi
-    
-    read input_var
-    if [ -z "$input_var" ] && [ -n "$default" ]; then
-        echo "$default"
-    else
-        echo "$input_var"
-    fi
-}
+read -p "Support ID [SafeVpn5]: " SUPPORT_ID
+SUPPORT_ID=${SUPPORT_ID:-SafeVpn5}
 
-# Questions
-echo -e "${CYAN}Please answer 4 questions below:${NC}"
+read -p "Channel ID [SafeVpn13]: " CHANNEL_ID
+CHANNEL_ID=${CHANNEL_ID:-SafeVpn13}
+
+read -p "Bot ID [VpnSafee_bot]: " BOT_ID
+BOT_ID=${BOT_ID:-VpnSafee_bot}
+
+read -p "Brand Name [Safe.Vpn]: " BRAND_NAME
+BRAND_NAME=${BRAND_NAME:-Safe.Vpn}
+
+echo ""
+echo "Support: $SUPPORT_ID"
+echo "Channel: $CHANNEL_ID"
+echo "Bot: $BOT_ID"
+echo "Brand: $BRAND_NAME"
 echo ""
 
-echo -e "${BLUE}-----------------------------------------${NC}"
-echo -e "${CYAN}Question 1 of 4 - Telegram Support ID${NC}"
-echo -e "${CYAN}Example: rootyxj${NC}"
-SUPPORT_ID=$(get_input "Enter support ID" "SafeVpn5")
-echo ""
-
-echo -e "${BLUE}-----------------------------------------${NC}"
-echo -e "${CYAN}Question 2 of 4 - Telegram Channel ID${NC}"
-echo -e "${CYAN}Example: mychannel${NC}"
-CHANNEL_ID=$(get_input "Enter channel ID" "SafeVpn13")
-echo ""
-
-echo -e "${BLUE}-----------------------------------------${NC}"
-echo -e "${CYAN}Question 3 of 4 - Telegram Bot ID${NC}"
-echo -e "${CYAN}Example: mybot${NC}"
-BOT_ID=$(get_input "Enter bot ID" "VpnSafee_bot")
-echo ""
-
-echo -e "${BLUE}-----------------------------------------${NC}"
-echo -e "${CYAN}Question 4 of 4 - Brand Name${NC}"
-echo -e "${CYAN}This will appear in the page title and footer${NC}"
-BRAND_NAME=$(get_input "Enter brand name" "Safe.Vpn")
-echo ""
-
-# Summary
-echo -e "${BLUE}=========================================${NC}"
-echo -e "${GREEN}Summary:${NC}"
-echo -e "${CYAN} Support ID: ${NC}${SUPPORT_ID}"
-echo -e "${CYAN} Channel ID: ${NC}${CHANNEL_ID}"
-echo -e "${CYAN} Bot ID: ${NC}${BOT_ID}"
-echo -e "${CYAN} Brand Name: ${NC}${BRAND_NAME}"
-echo -e "${BLUE}=========================================${NC}"
-echo ""
-
-# Confirm
-echo -e "${YELLOW}Is this information correct? (y/N)${NC}"
-read confirm
+read -p "Correct? (y/N): " confirm
 if [[ ! "$confirm" =~ ^[Yy]$ ]]; then
-    echo -e "${RED}Cancelled${NC}"
+    echo "Cancelled"
     exit 1
 fi
 
-# Create Directory
-DEST_DIR="/usr/local/x-ui/sub_templates"
-DEST_FILE="${DEST_DIR}/custom"
+DEST_FILE="/usr/local/x-ui/sub_templates/custom"
+sudo mkdir -p /usr/local/x-ui/sub_templates
 
-echo ""
-echo -e "${BLUE}Creating directory...${NC}"
-sudo mkdir -p "$DEST_DIR"
-echo -e "${GREEN}Directory ready${NC}"
-
-echo ""
-echo -e "${BLUE}Building custom template...${NC}"
-
-# Create HTML file with placeholders
-sudo tee "$DEST_FILE" > /dev/null << 'EOF'
+sudo tee "$DEST_FILE" > /dev/null << EOF
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover">
-<title>___BRAND___ — {{ if .subTitle }}{{ .subTitle }}{{ else }}Subscription Panel{{ end }}</title>
+<title>$BRAND_NAME — {{ if .subTitle }}{{ .subTitle }}{{ else }}پنل اشتراک{{ end }}</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <style>
   @font-face{ font-family:'Vazirmatn'; font-weight:400; src:url('https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/fonts/webfonts/Vazirmatn-Regular.woff2') format('woff2'); }
@@ -410,7 +351,7 @@ sudo tee "$DEST_FILE" > /dev/null << 'EOF'
   <section class="page" id="page-support">
     <div class="page-heading">Support & Channel</div>
 
-    <a class="support-card" href="https://t.me/___SUPPORT___" target="_blank" rel="noopener">
+    <a class="support-card" href="https://t.me/$SUPPORT_ID" target="_blank" rel="noopener">
       <div class="support-icon">🛟</div>
       <div class="support-meta">
         <div class="support-title">Online Support</div>
@@ -419,16 +360,16 @@ sudo tee "$DEST_FILE" > /dev/null << 'EOF'
       <div class="support-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>
     </a>
 
-    <a class="support-card" href="https://t.me/___CHANNEL___" target="_blank" rel="noopener">
+    <a class="support-card" href="https://t.me/$CHANNEL_ID" target="_blank" rel="noopener">
       <div class="support-icon">📣</div>
       <div class="support-meta">
-        <div class="support-title">Telegram Channel ___BRAND___</div>
+        <div class="support-title">Telegram Channel $BRAND_NAME</div>
         <div class="support-sub">News, updates and maintenance info</div>
       </div>
       <div class="support-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>
     </a>
 
-    <a class="support-card" href="https://t.me/___BOT___" target="_blank" rel="noopener">
+    <a class="support-card" href="https://t.me/$BOT_ID" target="_blank" rel="noopener">
       <div class="support-icon">🛒</div>
       <div class="support-meta">
         <div class="support-title">Buy & Renew</div>
@@ -437,7 +378,7 @@ sudo tee "$DEST_FILE" > /dev/null << 'EOF'
       <div class="support-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>
     </a>
 
-    <footer>___BRAND___</footer>
+    <footer>$BRAND_NAME</footer>
   </section>
 
   <section class="page" id="page-profile">
@@ -465,7 +406,7 @@ sudo tee "$DEST_FILE" > /dev/null << 'EOF'
       </div>
     </div>
     <div class="profile-actions">
-      <a class="qc-btn wide" id="btnRenew" href="https://t.me/___BOT___" target="_blank" rel="noopener">Renew Subscription</a>
+      <a class="qc-btn wide" id="btnRenew" href="https://t.me/$BOT_ID" target="_blank" rel="noopener">Renew Subscription</a>
     </div>
   </section>
 
@@ -581,7 +522,7 @@ function renderQR(text){
 }
 function deepLink(app){
   var encoded = encodeURIComponent(SUB_URL);
-  var name = encodeURIComponent("___BRAND___");
+  var name = encodeURIComponent("$BRAND_NAME");
   var url;
   if(app==='v2box')        url = 'v2box://install-config?url=' + encoded;
   else if(app==='v2rayng') url = 'v2rayng://install-sub?url=' + encoded + '&name=' + name;
@@ -768,22 +709,8 @@ renderAppGroup('android'); renderAppGroup('ios'); renderAppGroup('desktop');
 </html>
 EOF
 
-# Replace placeholders
-echo -e "${BLUE}Replacing values...${NC}"
-
-sudo sed -i "s#___SUPPORT___#${SUPPORT_ID}#g" "$DEST_FILE"
-sudo sed -i "s#___CHANNEL___#${CHANNEL_ID}#g" "$DEST_FILE"
-sudo sed -i "s#___BOT___#${BOT_ID}#g" "$DEST_FILE"
-sudo sed -i "s#___BRAND___#${BRAND_NAME}#g" "$DEST_FILE"
-
 sudo chmod 644 "$DEST_FILE"
 
 echo ""
-echo -e "${GREEN}=========================================${NC}"
-echo -e "${GREEN}SUCCESS! File created:${NC}"
-echo -e "${CYAN}${DEST_FILE}${NC}"
-echo -e "${GREEN}=========================================${NC}"
-echo ""
-echo -e "${YELLOW}Next step: Enable the custom template in X-UI panel${NC}"
-echo -e "${YELLOW}Template path: /usr/local/x-ui/sub_templates/custom${NC}"
-echo ""
+echo "SUCCESS! File created: $DEST_FILE"
+echo "Next step: Enable custom template in X-UI panel"
