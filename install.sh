@@ -2,10 +2,20 @@
 
 set -e
 
+if [ "$EUID" -ne 0 ]; then
+    echo "Please run as root."
+    exit 1
+fi
+
+echo "=============================="
+echo " SafeVPN Custom Installer"
+echo "=============================="
+echo
+
 read -p "Brand Name: " BRAND
-read -p "Bot Username: " BOT
-read -p "Channel Username: " CHANNEL
-read -p "Support Username: " SUPPORT
+read -p "Bot Username (without @): " BOT
+read -p "Channel Username (without @): " CHANNEL
+read -p "Support Username (without @): " SUPPORT
 
 mkdir -p /usr/local/x-ui/sub_templates/safevpn
 
@@ -20,4 +30,12 @@ sed -i "s|SafeVpn5|$SUPPORT|g" /usr/local/x-ui/sub_templates/safevpn/index.html
 cp /usr/local/x-ui/sub_templates/safevpn/index.html \
 /usr/local/x-ui/sub_templates/safevpn/sub.html
 
-echo "Done!"
+chmod 644 /usr/local/x-ui/sub_templates/safevpn/index.html
+chmod 644 /usr/local/x-ui/sub_templates/safevpn/sub.html
+
+echo
+echo "======================================"
+echo "Installation completed successfully!"
+echo "Template Path:"
+echo "/usr/local/x-ui/sub_templates/safevpn"
+echo "======================================"
