@@ -7,9 +7,9 @@ if [ "$EUID" -ne 0 ]; then
     exit 1
 fi
 
-echo "=============================="
-echo " SafeVPN Custom Installer"
-echo "=============================="
+echo "=================================="
+echo "   Safe-Sub Installer for 3x-ui"
+echo "=================================="
 echo
 
 read -p "Brand Name: " BRAND
@@ -17,25 +17,27 @@ read -p "Bot Username (without @): " BOT
 read -p "Channel Username (without @): " CHANNEL
 read -p "Support Username (without @): " SUPPORT
 
-mkdir -p /usr/local/x-ui/sub_templates/safevpn
+TEMPLATE_PATH="/usr/local/x-ui/sub_templates/Safe-Sub"
+
+mkdir -p "$TEMPLATE_PATH"
 
 curl -fsSL https://raw.githubusercontent.com/Safe-Net5/Safe-Sub/main/template.html \
--o /usr/local/x-ui/sub_templates/safevpn/index.html
+-o "$TEMPLATE_PATH/index.html"
 
-sed -i "s|Safe.Vpn|$BRAND|g" /usr/local/x-ui/sub_templates/safevpn/index.html
-sed -i "s|VpnSafee_bot|$BOT|g" /usr/local/x-ui/sub_templates/safevpn/index.html
-sed -i "s|SafeVpn13|$CHANNEL|g" /usr/local/x-ui/sub_templates/safevpn/index.html
-sed -i "s|SafeVpn5|$SUPPORT|g" /usr/local/x-ui/sub_templates/safevpn/index.html
+sed -i "s|Safe.Vpn|$BRAND|g" "$TEMPLATE_PATH/index.html"
+sed -i "s|VpnSafee_bot|$BOT|g" "$TEMPLATE_PATH/index.html"
+sed -i "s|SafeVpn13|$CHANNEL|g" "$TEMPLATE_PATH/index.html"
+sed -i "s|SafeVpn5|$SUPPORT|g" "$TEMPLATE_PATH/index.html"
 
-cp /usr/local/x-ui/sub_templates/safevpn/index.html \
-/usr/local/x-ui/sub_templates/safevpn/sub.html
+cp "$TEMPLATE_PATH/index.html" "$TEMPLATE_PATH/sub.html"
 
-chmod 644 /usr/local/x-ui/sub_templates/safevpn/index.html
-chmod 644 /usr/local/x-ui/sub_templates/safevpn/sub.html
+chmod 644 "$TEMPLATE_PATH/index.html"
+chmod 644 "$TEMPLATE_PATH/sub.html"
 
 echo
-echo "======================================"
-echo "Installation completed successfully!"
-echo "Template Path:"
-echo "/usr/local/x-ui/sub_templates/safevpn"
-echo "======================================"
+echo "=================================="
+echo " Installation completed!"
+echo
+echo " Template Path:"
+echo " $TEMPLATE_PATH"
+echo "=================================="
