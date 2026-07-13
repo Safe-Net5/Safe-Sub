@@ -17,7 +17,6 @@ echo -e "${BLUE}║        X-UI Custom Template Installer - Safe-Sub         ║
 echo -e "${BLUE}╚════════════════════════════════════════════════════════════╝${NC}"
 echo ""
 
-# دریافت اطلاعات
 read -p "Support ID [SafeVpn5]: " SUPPORT_ID
 SUPPORT_ID=${SUPPORT_ID:-SafeVpn5}
 
@@ -57,7 +56,6 @@ echo -e "${GREEN}Directory ready${NC}"
 echo ""
 echo -e "${BLUE}Building custom template...${NC}"
 
-# ساخت فایل با متغیرهای جایگزین شده
 sudo tee "$DEST_FILE" > /dev/null << EOF
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
@@ -726,7 +724,6 @@ renderAppGroup('android'); renderAppGroup('ios'); renderAppGroup('desktop');
 </html>
 EOF
 
-# تنظیم دسترسی
 sudo chmod 644 "$DEST_FILE"
 
 echo ""
