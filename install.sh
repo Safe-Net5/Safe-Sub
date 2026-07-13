@@ -13,15 +13,17 @@ NC='\033[0m'
 
 clear
 
-echo -e "${BLUE}╔═══════════════════════════════════════════════════════════╗${NC}"
-echo -e "${BLUE}║                                                           ║${NC}"
-echo -e "${BLUE}║       ${CYAN}نصب‌کننده قالب سفارشی پنل X-UI${BLUE}                    ║${NC}"
+echo -e "${BLUE}╔════════════════════════════════════════════════════════════╗${NC}"
+echo -e "${BLUE}║                                                            ║${NC}"
+echo -e "${BLUE}║        ${CYAN}نصب‌کننده قالب سفارشی پنل X-UI${BLUE}                   ║${NC}"
 echo -e "${BLUE}║              ${CYAN}Safe-Sub${BLUE}                                     ║${NC}"
-echo -e "${BLUE}║                                                           ║${NC}"
-echo -e "${BLUE}╚═══════════════════════════════════════════════════════════╝${NC}"
+echo -e "${BLUE}║                                                            ║${NC}"
+echo -e "${BLUE}╚════════════════════════════════════════════════════════════╝${NC}"
 echo ""
 
+# ============================================================
 # تابع دریافت ورودی
+# ============================================================
 get_input() {
     local prompt="$1"
     local default="$2"
@@ -41,49 +43,51 @@ get_input() {
     fi
 }
 
+# ============================================================
 # سوالات
+# ============================================================
 echo -e "${CYAN}📌 لطفاً ۴ سوال زیر را پاسخ دهید:${NC}"
 echo ""
 
-# سوال ۱
 echo -e "${BLUE}─────────────────────────────────────────────────────────${NC}"
 echo -e "${CYAN}[۱/۴] شناسه پشتیبانی تلگرام${NC}"
 echo -e "${CYAN}مثال: اگر شناسه rootyxj باشد → https://t.me/rootyxj${NC}"
 SUPPORT_ID=$(get_input "شناسه پشتیبانی را وارد کنید" "SafeVpn5")
 echo ""
 
-# سوال ۲
 echo -e "${BLUE}─────────────────────────────────────────────────────────${NC}"
 echo -e "${CYAN}[۲/۴] شناسه کانال تلگرام${NC}"
 echo -e "${CYAN}مثال: اگر شناسه mychannel باشد → https://t.me/mychannel${NC}"
 CHANNEL_ID=$(get_input "شناسه کانال را وارد کنید" "SafeVpn13")
 echo ""
 
-# سوال ۳
 echo -e "${BLUE}─────────────────────────────────────────────────────────${NC}"
 echo -e "${CYAN}[۳/۴] شناسه ربات فروش${NC}"
 echo -e "${CYAN}مثال: اگر شناسه mybot باشد → https://t.me/mybot${NC}"
 BOT_ID=$(get_input "شناسه ربات فروش را وارد کنید" "VpnSafee_bot")
 echo ""
 
-# سوال ۴
 echo -e "${BLUE}─────────────────────────────────────────────────────────${NC}"
 echo -e "${CYAN}[۴/۴] نام برند شما${NC}"
 echo -e "${CYAN}این نام در عنوان صفحه و فوتر نمایش داده می‌شود${NC}"
 BRAND_NAME=$(get_input "نام برند را وارد کنید" "Safe.Vpn")
 echo ""
 
-# خلاصه
-echo -e "${BLUE}═══════════════════════════════════════════════════════════${NC}"
+# ============================================================
+# خلاصه اطلاعات
+# ============================================================
+echo -e "${BLUE}════════════════════════════════════════════════════════════${NC}"
 echo -e "${GREEN}✅ خلاصه اطلاعات:${NC}"
 echo -e "${CYAN}  ● شناسه پشتیبانی:${NC} ${SUPPORT_ID}"
 echo -e "${CYAN}  ● شناسه کانال:${NC} ${CHANNEL_ID}"
 echo -e "${CYAN}  ● شناسه ربات فروش:${NC} ${BOT_ID}"
 echo -e "${CYAN}  ● نام برند:${NC} ${BRAND_NAME}"
-echo -e "${BLUE}═══════════════════════════════════════════════════════════${NC}"
+echo -e "${BLUE}════════════════════════════════════════════════════════════${NC}"
 echo ""
 
-# تأیید
+# ============================================================
+# تأیید نهایی
+# ============================================================
 echo -e "${YELLOW}⚠️  آیا اطلاعات صحیح است؟ (y/N)${NC}"
 read confirm
 if [[ ! "$confirm" =~ ^[Yy]$ ]]; then
@@ -91,7 +95,9 @@ if [[ ! "$confirm" =~ ^[Yy]$ ]]; then
     exit 1
 fi
 
-# مسیر
+# ============================================================
+# مسیر فایل
+# ============================================================
 DEST_DIR="/usr/local/x-ui/sub_templates"
 DEST_FILE="${DEST_DIR}/custom"
 
@@ -103,14 +109,16 @@ echo -e "${GREEN}✅ دایرکتوری آماده شد${NC}"
 echo ""
 echo -e "${BLUE}🔄 در حال ساخت فایل سفارشی...${NC}"
 
-# ساخت فایل با جایگزینی
-sudo tee "$DEST_FILE" > /dev/null << EOF
+# ============================================================
+# ساخت فایل با جایگزینی دقیق
+# ============================================================
+sudo tee "$DEST_FILE" > /dev/null << 'EOF'
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover">
-<title>${BRAND_NAME} — {{ if .subTitle }}{{ .subTitle }}{{ else }}پنل اشتراک{{ end }}</title>
+<title>REPLACE_BRAND — {{ if .subTitle }}{{ .subTitle }}{{ else }}پنل اشتراک{{ end }}</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <style>
   @font-face{ font-family:'Vazirmatn'; font-weight:400; src:url('https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/fonts/webfonts/Vazirmatn-Regular.woff2') format('woff2'); }
@@ -414,7 +422,7 @@ sudo tee "$DEST_FILE" > /dev/null << EOF
   <section class="page" id="page-support">
     <div class="page-heading">پشتیبانی و کانال</div>
 
-    <a class="support-card" href="https://t.me/${SUPPORT_ID}" target="_blank" rel="noopener">
+    <a class="support-card" href="https://t.me/REPLACE_SUPPORT" target="_blank" rel="noopener">
       <div class="support-icon">🛟</div>
       <div class="support-meta">
         <div class="support-title">پشتیبانی آنلاین</div>
@@ -423,16 +431,16 @@ sudo tee "$DEST_FILE" > /dev/null << EOF
       <div class="support-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>
     </a>
 
-    <a class="support-card" href="https://t.me/${CHANNEL_ID}" target="_blank" rel="noopener">
+    <a class="support-card" href="https://t.me/REPLACE_CHANNEL" target="_blank" rel="noopener">
       <div class="support-icon">📣</div>
       <div class="support-meta">
-        <div class="support-title">کانال تلگرام ${BRAND_NAME}</div>
+        <div class="support-title">کانال تلگرام REPLACE_BRAND</div>
         <div class="support-sub">اخبار، آموزش‌ها و اطلاع‌رسانی قطعی/تمدید</div>
       </div>
       <div class="support-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>
     </a>
 
-    <a class="support-card" href="https://t.me/${BOT_ID}" target="_blank" rel="noopener">
+    <a class="support-card" href="https://t.me/REPLACE_BOT" target="_blank" rel="noopener">
       <div class="support-icon">🛒</div>
       <div class="support-meta">
         <div class="support-title">خرید و تمدید سریع</div>
@@ -441,7 +449,7 @@ sudo tee "$DEST_FILE" > /dev/null << EOF
       <div class="support-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>
     </a>
 
-    <footer>${BRAND_NAME}</footer>
+    <footer>REPLACE_BRAND</footer>
   </section>
 
   <section class="page" id="page-profile">
@@ -469,7 +477,7 @@ sudo tee "$DEST_FILE" > /dev/null << EOF
       </div>
     </div>
     <div class="profile-actions">
-      <a class="qc-btn wide" id="btnRenew" href="https://t.me/${BOT_ID}" target="_blank" rel="noopener">تمدید اشتراک</a>
+      <a class="qc-btn wide" id="btnRenew" href="https://t.me/REPLACE_BOT" target="_blank" rel="noopener">تمدید اشتراک</a>
     </div>
   </section>
 
@@ -585,7 +593,7 @@ function renderQR(text){
 }
 function deepLink(app){
   var encoded = encodeURIComponent(SUB_URL);
-  var name = encodeURIComponent("${BRAND_NAME}");
+  var name = encodeURIComponent("REPLACE_BRAND");
   var url;
   if(app==='v2box')        url = 'v2box://install-config?url=' + encoded;
   else if(app==='v2rayng') url = 'v2rayng://install-sub?url=' + encoded + '&name=' + name;
@@ -772,13 +780,35 @@ renderAppGroup('android'); renderAppGroup('ios'); renderAppGroup('desktop');
 </html>
 EOF
 
-# اعمال دسترسی
+# ============================================================
+# جایگزینی مقادیر با sed
+# ============================================================
+echo -e "${BLUE}🔄 در حال جایگزینی مقادیر...${NC}"
+
+# 1. جایگزینی شناسه پشتیبانی
+sudo sed -i "s/REPLACE_SUPPORT/${SUPPORT_ID}/g" "$DEST_FILE"
+
+# 2. جایگزینی شناسه کانال
+sudo sed -i "s/REPLACE_CHANNEL/${CHANNEL_ID}/g" "$DEST_FILE"
+
+# 3. جایگزینی شناسه ربات
+sudo sed -i "s/REPLACE_BOT/${BOT_ID}/g" "$DEST_FILE"
+
+# 4. جایگزینی نام برند (با احتیاط بیشتر)
+sudo sed -i "s/REPLACE_BRAND/${BRAND_NAME}/g" "$DEST_FILE"
+
+# تنظیم دسترسی
 sudo chmod 644 "$DEST_FILE"
 
+# ============================================================
+# نمایش نتیجه
+# ============================================================
 echo ""
-echo -e "${GREEN}═══════════════════════════════════════════════════════════${NC}"
+echo -e "${GREEN}════════════════════════════════════════════════════════════${NC}"
 echo -e "${GREEN}✅ فایل با موفقیت ساخته شد!${NC}"
 echo -e "${GREEN}📁 مسیر: ${CYAN}${DEST_FILE}${NC}"
-echo -e "${GREEN}═══════════════════════════════════════════════════════════${NC}"
+echo -e "${GREEN}════════════════════════════════════════════════════════════${NC}"
 echo ""
 echo -e "${YELLOW}💡 نکته: حالا باید در پنل X-UI قالب رو فعال کنید${NC}"
+echo -e "${YELLOW}   مسیر قالب: /usr/local/x-ui/sub_templates/custom${NC}"
+echo ""
