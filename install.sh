@@ -1,14 +1,70 @@
-# پاک کردن فایل
-sudo rm -f /usr/local/x-ui/sub_templates/safevpn/index.html
+#!/bin/bash
 
-# ساختن فایل جدید با خط درست
-sudo tee /usr/local/x-ui/sub_templates/safevpn/index.html > /dev/null << 'EOF'
+# ============================================================
+# X-UI Custom Template Installer - Safe-Sub
+# ============================================================
+
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+BLUE='\033[0;34m'
+CYAN='\033[0;36m'
+RED='\033[0;31m'
+NC='\033[0m'
+
+clear
+echo -e "${BLUE}╔════════════════════════════════════════════════════════════╗${NC}"
+echo -e "${BLUE}║        X-UI Custom Template Installer - Safe-Sub         ║${NC}"
+echo -e "${BLUE}╚════════════════════════════════════════════════════════════╝${NC}"
+echo ""
+
+# دریافت اطلاعات
+read -p "Support ID [SafeVpn5]: " SUPPORT_ID
+SUPPORT_ID=${SUPPORT_ID:-SafeVpn5}
+
+read -p "Channel ID [SafeVpn13]: " CHANNEL_ID
+CHANNEL_ID=${CHANNEL_ID:-SafeVpn13}
+
+read -p "Bot ID [VpnSafee_bot]: " BOT_ID
+BOT_ID=${BOT_ID:-VpnSafee_bot}
+
+read -p "Brand Name [Safe.Vpn]: " BRAND_NAME
+BRAND_NAME=${BRAND_NAME:-Safe.Vpn}
+
+echo ""
+echo "Support: $SUPPORT_ID"
+echo "Channel: $CHANNEL_ID"
+echo "Bot: $BOT_ID"
+echo "Brand: $BRAND_NAME"
+echo ""
+
+read -p "Correct? (y/N): " confirm
+if [[ ! "$confirm" =~ ^[Yy]$ ]]; then
+    echo "Cancelled"
+    exit 1
+fi
+
+# ============================================================
+# ساخت پوشه و فایل
+# ============================================================
+DEST_DIR="/usr/local/x-ui/sub_templates/safevpn"
+DEST_FILE="${DEST_DIR}/index.html"
+
+echo ""
+echo -e "${BLUE}Creating directory: ${DEST_DIR}${NC}"
+sudo mkdir -p "$DEST_DIR"
+echo -e "${GREEN}Directory ready${NC}"
+
+echo ""
+echo -e "${BLUE}Building custom template...${NC}"
+
+# ساخت فایل با متغیرهای جایگزین شده
+sudo tee "$DEST_FILE" > /dev/null << EOF
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover">
-<title>Safe.Vpn — {{ if .subTitle }}{{ .subTitle }}{{ else }}پنل اشتراک{{ end }}</title>
+<title>$BRAND_NAME — {{ if .subTitle }}{{ .subTitle }}{{ else }}پنل اشتراک{{ end }}</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <style>
   @font-face{ font-family:'Vazirmatn'; font-weight:400; src:url('https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/fonts/webfonts/Vazirmatn-Regular.woff2') format('woff2'); }
@@ -312,7 +368,7 @@ sudo tee /usr/local/x-ui/sub_templates/safevpn/index.html > /dev/null << 'EOF'
   <section class="page" id="page-support">
     <div class="page-heading">Support & Channel</div>
 
-    <a class="support-card" href="https://t.me/SafeVpn5" target="_blank" rel="noopener">
+    <a class="support-card" href="https://t.me/$SUPPORT_ID" target="_blank" rel="noopener">
       <div class="support-icon">🛟</div>
       <div class="support-meta">
         <div class="support-title">Online Support</div>
@@ -321,16 +377,16 @@ sudo tee /usr/local/x-ui/sub_templates/safevpn/index.html > /dev/null << 'EOF'
       <div class="support-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>
     </a>
 
-    <a class="support-card" href="https://t.me/SafeVpn13" target="_blank" rel="noopener">
+    <a class="support-card" href="https://t.me/$CHANNEL_ID" target="_blank" rel="noopener">
       <div class="support-icon">📣</div>
       <div class="support-meta">
-        <div class="support-title">Telegram Channel Safe.Vpn</div>
+        <div class="support-title">Telegram Channel $BRAND_NAME</div>
         <div class="support-sub">News, updates and maintenance info</div>
       </div>
       <div class="support-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>
     </a>
 
-    <a class="support-card" href="https://t.me/VpnSafee_bot" target="_blank" rel="noopener">
+    <a class="support-card" href="https://t.me/$BOT_ID" target="_blank" rel="noopener">
       <div class="support-icon">🛒</div>
       <div class="support-meta">
         <div class="support-title">Buy & Renew</div>
@@ -339,7 +395,7 @@ sudo tee /usr/local/x-ui/sub_templates/safevpn/index.html > /dev/null << 'EOF'
       <div class="support-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>
     </a>
 
-    <footer>Safe.Vpn</footer>
+    <footer>$BRAND_NAME</footer>
   </section>
 
   <section class="page" id="page-profile">
@@ -367,7 +423,7 @@ sudo tee /usr/local/x-ui/sub_templates/safevpn/index.html > /dev/null << 'EOF'
       </div>
     </div>
     <div class="profile-actions">
-      <a class="qc-btn wide" id="btnRenew" href="https://t.me/VpnSafee_bot" target="_blank" rel="noopener">Renew Subscription</a>
+      <a class="qc-btn wide" id="btnRenew" href="https://t.me/$BOT_ID" target="_blank" rel="noopener">Renew Subscription</a>
     </div>
   </section>
 
@@ -483,7 +539,7 @@ function renderQR(text){
 }
 function deepLink(app){
   var encoded = encodeURIComponent(SUB_URL);
-  var name = encodeURIComponent("Safe.Vpn");
+  var name = encodeURIComponent("$BRAND_NAME");
   var url;
   if(app==='v2box')        url = 'v2box://install-config?url=' + encoded;
   else if(app==='v2rayng') url = 'v2rayng://install-sub?url=' + encoded + '&name=' + name;
@@ -669,3 +725,16 @@ renderAppGroup('android'); renderAppGroup('ios'); renderAppGroup('desktop');
 </body>
 </html>
 EOF
+
+# تنظیم دسترسی
+sudo chmod 644 "$DEST_FILE"
+
+echo ""
+echo -e "${GREEN}=========================================${NC}"
+echo -e "${GREEN}SUCCESS! File created:${NC}"
+echo -e "${CYAN}${DEST_FILE}${NC}"
+echo -e "${GREEN}=========================================${NC}"
+echo ""
+echo -e "${YELLOW}Now go to X-UI panel -> Settings -> Subscription Settings${NC}"
+echo -e "${YELLOW}Set template path to: ${CYAN}/usr/local/x-ui/sub_templates/safevpn${NC}"
+echo ""
