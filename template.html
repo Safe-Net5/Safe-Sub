@@ -126,20 +126,20 @@
   .section-label svg{ width:14px; height:14px; }
   .page-heading{ font-size:19px; font-weight:800; margin:2px 2px 16px; }
 
-  .qc-grid{ display:grid; grid-template-columns:1fr 1fr; gap:9px; }
+  .qc-grid{ display:grid; grid-template-columns:1fr 1fr; gap:6px; }
   .qc-btn{
-    display:flex; flex-direction:column; align-items:center; justify-content:center; gap:6px;
-    background:var(--panel-2); border:1px solid var(--line); border-radius:16px;
-    padding:13px 8px; cursor:pointer; color:var(--text); font-family:inherit; font-size:inherit;
+    display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px;
+    background:var(--panel-2); border:1px solid var(--line); border-radius:14px;
+    padding:10px 6px; cursor:pointer; color:var(--text); font-family:inherit; font-size:inherit;
     text-decoration:none; width:100%;
   }
-  .qc-btn span{ font-size:12px; font-weight:600; }
-  .qc-btn svg{ width:19px; height:19px; }
+  .qc-btn span{ font-size:11px; font-weight:600; }
+  .qc-btn svg{ width:17px; height:17px; }
   .qc-btn:active{ transform:scale(.96); }
   .qc-btn.wide{ grid-column:1/-1; flex-direction:row; background:linear-gradient(90deg, var(--brand), #4a30cf); border-color:transparent; }
   .qc-btn.wide span{ color:#fff; }
   .qc-btn.wide svg{ color:#fff; }
-  .qc-btn .badge{ font-size:9px; color:var(--text-dim2); font-weight:500; }
+  .qc-btn .badge{ font-size:8px; color:var(--text-dim2); font-weight:500; }
 
   .toolbar{ display:flex; gap:8px; margin-bottom:11px; }
   .search-box{ flex:1; display:flex; align-items:center; gap:8px; background:var(--panel-2); border:1px solid var(--line); border-radius:13px; padding:9px 12px; }
@@ -201,7 +201,12 @@
   .profile-line .k{ color:var(--text-dim); display:flex; align-items:center; gap:7px; }
   .profile-line .k svg{ width:14px; height:14px; }
   .profile-line .v{ font-family:'Vazir-Mono',sans-serif; font-weight:600; }
-  .profile-actions{ display:flex; gap:10px; margin-top:14px; }
+  .profile-actions{ display:flex; gap:10px; margin-top:14px; flex-direction:column; }
+  .profile-actions .qc-btn.wide{ grid-column:unset; }
+
+  .profile-qr-row{ display:flex; justify-content:center; padding:12px 0 6px; border-bottom:1px solid var(--line); }
+  .profile-qr-box{ background:#fff; padding:8px; border-radius:14px; display:inline-block; }
+  .profile-qr-box canvas{ display:block; width:96px; height:96px; }
 
   .toast{ position:fixed; bottom:88px; left:50%; transform:translateX(-50%) translateY(16px); background:var(--panel-3); border:1px solid var(--line-2); padding:10px 18px; border-radius:12px; font-size:12.5px; opacity:0; pointer-events:none; transition:all .25s ease; z-index:60; white-space:nowrap; }
   .toast.show{ opacity:1; transform:translateX(-50%) translateY(0); }
@@ -283,12 +288,22 @@
       <button class="qc-btn" type="button" id="btnV2box">
         <span class="badge">V2Box</span>
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
-        <span>افزودن خودکار</span>
+        <span>افزودن</span>
       </button>
       <button class="qc-btn" type="button" id="btnV2rayng">
         <span class="badge">v2rayNG</span>
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
-        <span>افزودن خودکار</span>
+        <span>افزودن</span>
+      </button>
+      <button class="qc-btn" type="button" id="btnHapp">
+        <span class="badge">Happ</span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
+        <span>افزودن</span>
+      </button>
+      <button class="qc-btn" type="button" id="btnHiddify">
+        <span class="badge">Hiddify</span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
+        <span>افزودن</span>
       </button>
     </div>
   </section>
@@ -389,9 +404,13 @@
         <span class="k"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M3 9h18M8 3v4M16 3v4"/></svg>تاریخ انقضا</span>
         <span class="v" id="p_expire">—</span>
       </div>
+      <div class="profile-qr-row">
+        <div class="profile-qr-box" id="profileQR"></div>
+      </div>
     </div>
     <div class="profile-actions">
       <a class="qc-btn wide" id="btnRenew" href="https://t.me/VpnSafee_bot" target="_blank" rel="noopener">تمدید اشتراک</a>
+      <button class="qc-btn wide" id="btnCopySubLink" style="background:var(--panel-2);border-color:var(--line);">کپی لینک اشتراک</button>
     </div>
   </section>
 
@@ -500,10 +519,10 @@ function copyText(text,msg){
   navigator.clipboard.writeText(text).then(function(){ toast(msg||'کپی شد'); })
     .catch(function(){ toast('کپی نشد، دوباره تلاش کنید'); });
 }
-function renderQR(text){
-  var el=document.getElementById('qrMain'); el.innerHTML="";
-  new QRCode(el, { text:text, width:220, height:220, colorDark:"#0d0b1a", colorLight:"#ffffff" });
-  document.getElementById('qrLinkText').textContent = text;
+function renderQR(text, containerId){
+  var el=document.getElementById(containerId); if(!el) return;
+  el.innerHTML="";
+  new QRCode(el, { text:text, width:containerId==='profileQR'?96:220, height:containerId==='profileQR'?96:220, colorDark:"#0d0b1a", colorLight:"#ffffff" });
 }
 function deepLink(app){
   var encoded = encodeURIComponent(SUB_URL);
@@ -511,6 +530,8 @@ function deepLink(app){
   var url;
   if(app==='v2box')        url = 'v2box://install-config?url=' + encoded;
   else if(app==='v2rayng') url = 'v2rayng://install-sub?url=' + encoded + '&name=' + name;
+  else if(app==='happ')    url = 'happ://install-config?url=' + encoded;
+  else if(app==='hiddify') url = 'hiddify://install-config?url=' + encoded;
   else return;
   window.location.href = url;
   toast('در حال باز کردن اپ... اگر نصب نیست، از بخش «برنامه» نصبش کنید');
@@ -518,7 +539,10 @@ function deepLink(app){
 
 document.getElementById('btnV2box').addEventListener('click', function(){ deepLink('v2box'); });
 document.getElementById('btnV2rayng').addEventListener('click', function(){ deepLink('v2rayng'); });
+document.getElementById('btnHapp').addEventListener('click', function(){ deepLink('happ'); });
+document.getElementById('btnHiddify').addEventListener('click', function(){ deepLink('hiddify'); });
 document.getElementById('qrCopyBtn').addEventListener('click', function(){ copyText(document.getElementById('qrLinkText').textContent,'کپی شد'); });
+document.getElementById('btnCopySubLink').addEventListener('click', function(){ copyText(SUB_URL,'لینک اشتراک کپی شد'); });
 
 document.getElementById('userName').textContent = USERNAME;
 document.getElementById('avatarInitial').textContent = (USERNAME||'?').trim().charAt(0).toUpperCase();
@@ -554,6 +578,8 @@ document.getElementById('avatarInitial').textContent = (USERNAME||'?').trim().ch
   document.getElementById('p_count').textContent = LINKS.length + ' سرور';
   document.getElementById('p_lastonline').textContent = LAST_ONLINE>0 ? new Date(LAST_ONLINE).toLocaleString('fa-IR') : 'هرگز';
   document.getElementById('p_expire').textContent = EXPIRE_SEC>0 ? new Date(EXPIRE_SEC*1000).toLocaleDateString('fa-IR') : 'نامحدود';
+
+  if(SUB_URL) renderQR(SUB_URL, 'profileQR');
 })();
 
 function parseLink(uri){
@@ -650,7 +676,7 @@ serverListEl.addEventListener('click', function(e){
   var port = card.getAttribute('data-port');
   var action = actionEl.getAttribute('data-action');
   if(action==='ping') pingHost(host, port, actionEl);
-  else if(action==='qr'){ openModal('qrModal'); renderQR(link); }
+  else if(action==='qr'){ openModal('qrModal'); renderQR(link, 'qrMain'); document.getElementById('qrLinkText').textContent = link; }
   else if(action==='copy') copyText(link, 'کانفیگ کپی شد');
 });
 document.getElementById('searchInput').addEventListener('input', renderServers);
@@ -665,6 +691,7 @@ var APPS = {
   android: [
     { name:'V2Box', tag:'پیشنهادی', icon:'📦', url:'https://play.google.com/store/apps/details?id=dev.hexasoftware.v2box' },
     { name:'Hiddify Next', icon:'🛡️', url:'https://hiddify.com/download/' },
+    { name:'Happ', icon:'🚀', url:'https://github.com/cloudflare/happ/releases' },
     { name:'v2rayNG', icon:'🤖', url:'https://github.com/2dust/v2rayNG/releases' }
   ],
   ios: [
