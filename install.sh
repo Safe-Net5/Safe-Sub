@@ -24,20 +24,13 @@ if [ "$OPTION" == "2" ]; then
     echo "=================================="
     echo
     
-    TEMPLATE_PATH="/usr/local/x-ui/sub_templates/Safe-Vpn"
+    TEMPLATE_PATH="/usr/local/x-ui/sub_templates/Safe-Sub"
     
     if [ -d "$TEMPLATE_PATH" ]; then
         rm -rf "$TEMPLATE_PATH"
         echo "✅ Template removed: $TEMPLATE_PATH"
     else
         echo "⚠️ Template not found: $TEMPLATE_PATH"
-    fi
-    
-    # حذف از مسیر قدیمی (اگر وجود داشت)
-    OLD_PATH="/usr/local/x-ui/sub_templates/Safe-Sub"
-    if [ -d "$OLD_PATH" ]; then
-        rm -rf "$OLD_PATH"
-        echo "✅ Old template removed: $OLD_PATH"
     fi
     
     echo
@@ -63,7 +56,7 @@ read -p "Bot Username (without @): " BOT
 read -p "Channel Username (without @): " CHANNEL
 read -p "Support Username (without @): " SUPPORT
 
-TEMPLATE_PATH="/usr/local/x-ui/sub_templates/Safe-Vpn"
+TEMPLATE_PATH="/usr/local/x-ui/sub_templates/Safe-Sub"
 
 mkdir -p "$TEMPLATE_PATH"
 
@@ -78,7 +71,7 @@ sed -i "s|SafeVpn5|$SUPPORT|g" "$TEMPLATE_PATH/index.html"
 # ایجاد فایل کانفیگ برای متغیرهای مورد نیاز
 cat > "$TEMPLATE_PATH/config.json" <<EOF
 {
-    "template": "Safe-Vpn",
+    "template": "Safe-Sub",
     "variables": {
         "subId": "user.id",
         "subUrl": "user.sub_url",
@@ -110,5 +103,5 @@ echo " $TEMPLATE_PATH"
 echo
 echo " Make sure to:"
 echo " 1. Upload the new template.html to your repository"
-echo " 2. Configure 3x-ui to use 'Safe-Vpn' template"
+echo " 2. Configure 3x-ui to use 'Safe-Sub' template"
 echo "=================================="
