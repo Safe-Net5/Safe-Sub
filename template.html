@@ -636,18 +636,36 @@ function protoLabel(p){
 }
 
 function pingHost(host, port, chipEl){
-  chipEl.textContent = '...'; chipEl.className = 'ping-chip';
-  var target = 'https://8.8.8.8/';
+  chipEl.textContent = '...'; 
+  chipEl.className = 'ping-chip';
+  
   var t0 = performance.now();
-  fetch(target, { mode:'no-cors', cache:'no-store' }).then(finish).catch(finish);
-  var timeout = setTimeout(function(){ chipEl.textContent='timeout'; chipEl.className='ping-chip bad'; }, 4000);
-  function finish(){
+  
+  var img = new Image();
+  var timeout = setTimeout(function(){
+    img.onload = null;
+    img.onerror = null;
+    chipEl.textContent = 'timeout';
+    chipEl.className = 'ping-chip bad';
+  }, 4000);
+  
+  img.onload = function(){
     clearTimeout(timeout);
-    var ms = Math.round(performance.now()-t0);
+    var ms = Math.round(performance.now() - t0);
     var halfMs = Math.max(1, Math.round(ms * 0.5));
     chipEl.textContent = halfMs + ' ms';
-    chipEl.className = 'ping-chip ' + (halfMs<75?'good':(halfMs<200?'warn':'bad'));
-  }
+    chipEl.className = 'ping-chip ' + (halfMs < 75 ? 'good' : (halfMs < 200 ? 'warn' : 'bad'));
+  };
+  
+  img.onerror = function(){
+    clearTimeout(timeout);
+    var ms = Math.round(performance.now() - t0);
+    var halfMs = Math.max(1, Math.round(ms * 0.5));
+    chipEl.textContent = halfMs + ' ms';
+    chipEl.className = 'ping-chip ' + (halfMs < 75 ? 'good' : (halfMs < 200 ? 'warn' : 'bad'));
+  };
+  
+  img.src = 'https://www.google.com/favicon.ico?_=' + Date.now();
 }
 
 var sortMode = 'default';
