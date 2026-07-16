@@ -12,8 +12,8 @@ echo "   Safe-Sub Installer for 3x-ui"
 echo "=================================="
 echo
 
-echo "1) Install"
-echo "2) Uninstall"
+echo "🟢1) Install"
+echo "🔴2) Uninstall"
 echo
 read -p "Choose an option (1 or 2): " OPTION
 
@@ -54,7 +54,7 @@ fi
 
 echo
 echo "=================================="
-echo "   Safe-Sub Installer for 3x-ui"
+echo "   Installing Safe-Sub..."
 echo "=================================="
 echo
 
