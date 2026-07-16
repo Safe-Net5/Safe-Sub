@@ -12,12 +12,58 @@ echo "   Safe-Sub Installer for 3x-ui"
 echo "=================================="
 echo
 
+echo "1) Install"
+echo "2) Uninstall"
+echo
+read -p "Choose an option (1 or 2): " OPTION
+
+if [ "$OPTION" == "2" ]; then
+    echo
+    echo "=================================="
+    echo "   Uninstalling Safe-Sub..."
+    echo "=================================="
+    echo
+    
+    TEMPLATE_PATH="/usr/local/x-ui/sub_templates/safevpn"
+    
+    if [ -d "$TEMPLATE_PATH" ]; then
+        rm -rf "$TEMPLATE_PATH"
+        echo "✅ Template removed: $TEMPLATE_PATH"
+    else
+        echo "⚠️ Template not found: $TEMPLATE_PATH"
+    fi
+    
+    # حذف از مسیر قدیمی (اگر وجود داشت)
+    OLD_PATH="/usr/local/x-ui/sub_templates/Safe-Sub"
+    if [ -d "$OLD_PATH" ]; then
+        rm -rf "$OLD_PATH"
+        echo "✅ Old template removed: $OLD_PATH"
+    fi
+    
+    echo
+    echo "=================================="
+    echo "   Uninstall completed!"
+    echo "=================================="
+    exit 0
+fi
+
+if [ "$OPTION" != "1" ]; then
+    echo "❌ Invalid option. Please run again."
+    exit 1
+fi
+
+echo
+echo "=================================="
+echo "   Safe-Sub Installer for 3x-ui"
+echo "=================================="
+echo
+
 read -p "Brand Name: " BRAND
 read -p "Bot Username (without @): " BOT
 read -p "Channel Username (without @): " CHANNEL
 read -p "Support Username (without @): " SUPPORT
 
-TEMPLATE_PATH="/usr/local/x-ui/sub_templates/Safe-Sub"
+TEMPLATE_PATH="/usr/local/x-ui/sub_templates/safevpn"
 
 mkdir -p "$TEMPLATE_PATH"
 
@@ -32,7 +78,7 @@ sed -i "s|SafeVpn5|$SUPPORT|g" "$TEMPLATE_PATH/index.html"
 # ایجاد فایل کانفیگ برای متغیرهای مورد نیاز
 cat > "$TEMPLATE_PATH/config.json" <<EOF
 {
-    "template": "Safe-Sub",
+    "template": "safevpn",
     "variables": {
         "subId": "user.id",
         "subUrl": "user.sub_url",
@@ -64,5 +110,5 @@ echo " $TEMPLATE_PATH"
 echo
 echo " Make sure to:"
 echo " 1. Upload the new template.html to your repository"
-echo " 2. Configure 3x-ui to use 'Safe-Sub' template"
+echo " 2. Configure 3x-ui to use 'safevpn' template"
 echo "=================================="
