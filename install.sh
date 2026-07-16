@@ -24,7 +24,7 @@ if [ "$OPTION" == "2" ]; then
     echo "=================================="
     echo
     
-    TEMPLATE_PATH="/usr/local/x-ui/sub_templates/safevpn"
+    TEMPLATE_PATH="/usr/local/x-ui/sub_templates/Safe-Vpn"
     
     if [ -d "$TEMPLATE_PATH" ]; then
         rm -rf "$TEMPLATE_PATH"
@@ -63,7 +63,7 @@ read -p "Bot Username (without @): " BOT
 read -p "Channel Username (without @): " CHANNEL
 read -p "Support Username (without @): " SUPPORT
 
-TEMPLATE_PATH="/usr/local/x-ui/sub_templates/safevpn"
+TEMPLATE_PATH="/usr/local/x-ui/sub_templates/Safe-Vpn"
 
 mkdir -p "$TEMPLATE_PATH"
 
@@ -78,7 +78,7 @@ sed -i "s|SafeVpn5|$SUPPORT|g" "$TEMPLATE_PATH/index.html"
 # ایجاد فایل کانفیگ برای متغیرهای مورد نیاز
 cat > "$TEMPLATE_PATH/config.json" <<EOF
 {
-    "template": "safevpn",
+    "template": "Safe-Vpn",
     "variables": {
         "subId": "user.id",
         "subUrl": "user.sub_url",
@@ -110,5 +110,5 @@ echo " $TEMPLATE_PATH"
 echo
 echo " Make sure to:"
 echo " 1. Upload the new template.html to your repository"
-echo " 2. Configure 3x-ui to use 'safevpn' template"
+echo " 2. Configure 3x-ui to use 'Safe-Vpn' template"
 echo "=================================="
