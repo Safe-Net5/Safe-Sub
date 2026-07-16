@@ -32,6 +32,7 @@
   }
 
   *{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
+  html, body{height:100%;}
   html{scroll-behavior:smooth;}
   body{
     margin:0; background:var(--ink); color:var(--text);
@@ -47,8 +48,11 @@
   ::selection{ background:rgba(106,75,255,0.35); }
 
   .page{ display:none; animation:fadeIn .25s ease; }
-  .page.active{ display:block; }
+  .page.active{ display:flex; flex-direction:column; }
   @keyframes fadeIn{ from{opacity:0; transform:translateY(6px);} to{opacity:1; transform:translateY(0);} }
+  
+  .page-content{ flex:1; }
+  .page-footer{ margin-top:auto; padding-top:12px; }
 
   .topbar{ display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; }
   .greeting-row{ display:flex; align-items:center; gap:11px; }
@@ -247,166 +251,181 @@
   </div>
 
   <section class="page active" id="page-dashboard">
-    <div class="hero">
-      <div class="hero-head">
-        <div>
-          {{ if .enabled }}
-          <div class="status-pill"><span class="dot"></span> سرویس فعال است</div>
-          {{ else }}
-          <div class="status-pill off"><span class="dot"></span> سرویس غیرفعال / منقضی</div>
-          {{ end }}
-          <p class="plan-title">{{ if .subTitle }}{{ .subTitle }}{{ else }}پلن اشتراک شما{{ end }}</p>
-          <p class="plan-days" id="daysLeft">—</p>
-          <p class="plan-expire" id="expireDate"></p>
+    <div class="page-content">
+      <div class="hero">
+        <div class="hero-head">
+          <div>
+            {{ if .enabled }}
+            <div class="status-pill"><span class="dot"></span> سرویس فعال است</div>
+            {{ else }}
+            <div class="status-pill off"><span class="dot"></span> سرویس غیرفعال / منقضی</div>
+            {{ end }}
+            <p class="plan-title">{{ if .subTitle }}{{ .subTitle }}{{ else }}پلن اشتراک شما{{ end }}</p>
+            <p class="plan-days" id="daysLeft">—</p>
+            <p class="plan-expire" id="expireDate"></p>
+          </div>
+          <div class="ring-wrap">
+            <svg width="88" height="88" viewBox="0 0 88 88">
+              <defs><linearGradient id="ringGrad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#6a4bff"/><stop offset="100%" stop-color="#28d9c4"/></linearGradient></defs>
+              <circle class="ring-track" cx="44" cy="44" r="37"/>
+              <circle class="ring-value" id="ringArc" cx="44" cy="44" r="37" stroke-dasharray="232.5" stroke-dashoffset="232.5"/>
+            </svg>
+            <div class="ring-label"><span class="ring-pct" id="ringPct">—</span><span class="ring-cap">باقی‌مانده</span></div>
+          </div>
         </div>
-        <div class="ring-wrap">
-          <svg width="88" height="88" viewBox="0 0 88 88">
-            <defs><linearGradient id="ringGrad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#6a4bff"/><stop offset="100%" stop-color="#28d9c4"/></linearGradient></defs>
-            <circle class="ring-track" cx="44" cy="44" r="37"/>
-            <circle class="ring-value" id="ringArc" cx="44" cy="44" r="37" stroke-dasharray="232.5" stroke-dashoffset="232.5"/>
-          </svg>
-          <div class="ring-label"><span class="ring-pct" id="ringPct">—</span><span class="ring-cap">باقی‌مانده</span></div>
+
+        <div class="usage-bar-wrap">
+          <div class="usage-bar-track"><div class="usage-bar-fill" id="usageBarFill"></div></div>
+          <div class="usage-bar-labels"><span id="usageUsedLabel">0 GB مصرف‌شده</span><span id="usageTotalLabel">از نامحدود</span></div>
+        </div>
+
+        <div class="quota-row">
+          <div class="quota-item used-total"><b id="usedVal">—</b><small>حجم استفاده‌شده</small></div>
+          <div class="quota-item lim"><b id="limVal">—</b><small>حجم کل</small></div>
         </div>
       </div>
 
-      <div class="usage-bar-wrap">
-        <div class="usage-bar-track"><div class="usage-bar-fill" id="usageBarFill"></div></div>
-        <div class="usage-bar-labels"><span id="usageUsedLabel">0 GB مصرف‌شده</span><span id="usageTotalLabel">از نامحدود</span></div>
+      <div class="section-label">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2 3 14h7l-1 8 10-12h-7l1-8Z"/></svg>
+        اتصال سریع
       </div>
-
-      <div class="quota-row">
-        <div class="quota-item used-total"><b id="usedVal">—</b><small>حجم استفاده‌شده</small></div>
-        <div class="quota-item lim"><b id="limVal">—</b><small>حجم کل</small></div>
+      <div class="qc-grid">
+        <button class="qc-btn" type="button" id="btnV2box">
+          <span class="badge">V2Box</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
+          <span>افزودن</span>
+        </button>
+        <button class="qc-btn" type="button" id="btnV2rayng">
+          <span class="badge">v2rayNG</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
+          <span>افزودن</span>
+        </button>
+        <button class="qc-btn" type="button" id="btnHapp">
+          <span class="badge">Happ</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
+          <span>افزودن</span>
+        </button>
+        <button class="qc-btn" type="button" id="btnHiddify">
+          <span class="badge">Hiddify</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
+          <span>افزودن</span>
+        </button>
       </div>
     </div>
-
-    <div class="section-label">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2 3 14h7l-1 8 10-12h-7l1-8Z"/></svg>
-      اتصال سریع
-    </div>
-    <div class="qc-grid">
-      <button class="qc-btn" type="button" id="btnV2box">
-        <span class="badge">V2Box</span>
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
-        <span>افزودن</span>
-      </button>
-      <button class="qc-btn" type="button" id="btnV2rayng">
-        <span class="badge">v2rayNG</span>
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
-        <span>افزودن</span>
-      </button>
-      <button class="qc-btn" type="button" id="btnHapp">
-        <span class="badge">Happ</span>
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
-        <span>افزودن</span>
-      </button>
-      <button class="qc-btn" type="button" id="btnHiddify">
-        <span class="badge">Hiddify</span>
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
-        <span>افزودن</span>
-      </button>
-    </div>
+    <div class="page-footer"></div>
   </section>
 
   <section class="page" id="page-servers">
-    <div class="page-heading">سرویس‌ها</div>
-    <div class="toolbar">
-      <div class="search-box">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
-        <input id="searchInput" placeholder="جستجوی سرور...">
+    <div class="page-content">
+      <div class="page-heading">سرویس‌ها</div>
+      <div class="toolbar">
+        <div class="search-box">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+          <input id="searchInput" placeholder="جستجوی سرور...">
+        </div>
+        <div class="sort-btn" id="sortBtn" title="مرتب‌سازی">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 7h13M3 12h9M3 17h5M17 4v16M17 4l-3 3M17 4l3 3M17 20l-3-3M17 20l3-3"/></svg>
+        </div>
       </div>
-      <div class="sort-btn" id="sortBtn" title="مرتب‌سازی">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 7h13M3 12h9M3 17h5M17 4v16M17 4l-3 3M17 4l3 3M17 20l-3-3M17 20l3-3"/></svg>
-      </div>
+      <div class="server-list" id="serverList"></div>
     </div>
-    <div class="server-list" id="serverList"></div>
+    <div class="page-footer"></div>
   </section>
 
   <section class="page" id="page-apps">
-    <div class="page-heading">دانلود برنامه</div>
-    <div class="platform-tabs">
-      <div class="platform-tab active" data-platform="android">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="6" y="3" width="12" height="18" rx="2"/><path d="M11 18h2"/></svg>
-        اندروید
+    <div class="page-content">
+      <div class="page-heading">دانلود برنامه</div>
+      <div class="platform-tabs">
+        <div class="platform-tab active" data-platform="android">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="6" y="3" width="12" height="18" rx="2"/><path d="M11 18h2"/></svg>
+          اندروید
+        </div>
+        <div class="platform-tab" data-platform="ios">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="7" y="2" width="10" height="20" rx="2"/><path d="M11 19h2"/></svg>
+          آیفون / آیپد
+        </div>
+        <div class="platform-tab" data-platform="desktop">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></svg>
+          ویندوز / مک
+        </div>
       </div>
-      <div class="platform-tab" data-platform="ios">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="7" y="2" width="10" height="20" rx="2"/><path d="M11 19h2"/></svg>
-        آیفون / آیپد
-      </div>
-      <div class="platform-tab" data-platform="desktop">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></svg>
-        ویندوز / مک
-      </div>
+      <div class="app-group active" id="apps-android"></div>
+      <div class="app-group" id="apps-ios"></div>
+      <div class="app-group" id="apps-desktop"></div>
     </div>
-    <div class="app-group active" id="apps-android"></div>
-    <div class="app-group" id="apps-ios"></div>
-    <div class="app-group" id="apps-desktop"></div>
+    <div class="page-footer"></div>
   </section>
 
   <section class="page" id="page-support">
-    <div class="page-heading">پشتیبانی و کانال</div>
+    <div class="page-content">
+      <div class="page-heading">پشتیبانی و کانال</div>
 
-    <a class="support-card" href="https://t.me/SafeVpn5" target="_blank" rel="noopener">
-      <div class="support-icon">🛟</div>
-      <div class="support-meta">
-        <div class="support-title">پشتیبانی آنلاین</div>
-        <div class="support-sub">پاسخگویی به سوالات و مشکلات اتصال</div>
-      </div>
-      <div class="support-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>
-    </a>
+      <a class="support-card" href="https://t.me/SafeVpn5" target="_blank" rel="noopener">
+        <div class="support-icon">🛟</div>
+        <div class="support-meta">
+          <div class="support-title">پشتیبانی آنلاین</div>
+          <div class="support-sub">پاسخگویی به سوالات و مشکلات اتصال</div>
+        </div>
+        <div class="support-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>
+      </a>
 
-    <a class="support-card" href="https://t.me/SafeVpn13" target="_blank" rel="noopener">
-      <div class="support-icon">📣</div>
-      <div class="support-meta">
-        <div class="support-title">کانال تلگرام Safe.Vpn</div>
-        <div class="support-sub">اخبار، آموزش‌ها و اطلاع‌رسانی قطعی/تمدید</div>
-      </div>
-      <div class="support-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>
-    </a>
+      <a class="support-card" href="https://t.me/SafeVpn13" target="_blank" rel="noopener">
+        <div class="support-icon">📣</div>
+        <div class="support-meta">
+          <div class="support-title">کانال تلگرام Safe.Vpn</div>
+          <div class="support-sub">اخبار، آموزش‌ها و اطلاع‌رسانی قطعی/تمدید</div>
+        </div>
+        <div class="support-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>
+      </a>
 
-    <a class="support-card" href="https://t.me/VpnSafee_bot" target="_blank" rel="noopener">
-  <div class="support-icon">🛒</div>
-  <div class="support-meta">
-    <div class="support-title">خرید و تمدید سریع</div>
-    <div class="support-sub">ورود به بخش خرید و تمدید اشتراک</div>
-  </div>
-  <div class="support-arrow">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-      <path d="m9 18 6-6-6-6"/>
-    </svg>
-  </div>
-</a>
+      <a class="support-card" href="https://t.me/VpnSafee_bot" target="_blank" rel="noopener">
+        <div class="support-icon">🛒</div>
+        <div class="support-meta">
+          <div class="support-title">خرید و تمدید سریع</div>
+          <div class="support-sub">ورود به بخش خرید و تمدید اشتراک</div>
+        </div>
+        <div class="support-arrow">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="m9 18 6-6-6-6"/>
+          </svg>
+        </div>
+      </a>
 
-
-    <footer>Safe.Vpn</footer>
+      <footer>Safe.Vpn</footer>
+    </div>
+    <div class="page-footer"></div>
   </section>
 
   <section class="page" id="page-profile">
-    <div class="page-heading">پروفایل</div>
-    <div class="profile-card">
-      <div class="profile-line">
-        <span class="k"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>نام کاربری</span>
-        <span class="v" id="p_username">—</span>
-      </div>
-      <div class="profile-line">
-        <span class="k"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="6" rx="2"/><rect x="3" y="14" width="18" height="6" rx="2"/></svg>تعداد سرورها</span>
-        <span class="v" id="p_count">—</span>
-      </div>
-      <div class="profile-line">
-        <span class="k"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>آخرین اتصال</span>
-        <span class="v" id="p_lastonline">—</span>
-      </div>
-      <div class="profile-line">
-        <span class="k"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M3 9h18M8 3v4M16 3v4"/></svg>روزهای باقی‌مانده</span>
-        <span class="v" id="p_daysleft">—</span>
-      </div>
-      <div class="profile-qr-row">
-        <div class="profile-qr-box" id="profileQR"></div>
+    <div class="page-content">
+      <div class="page-heading">پروفایل</div>
+      <div class="profile-card">
+        <div class="profile-line">
+          <span class="k"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>نام کاربری</span>
+          <span class="v" id="p_username">—</span>
+        </div>
+        <div class="profile-line">
+          <span class="k"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="6" rx="2"/><rect x="3" y="14" width="18" height="6" rx="2"/></svg>تعداد سرورها</span>
+          <span class="v" id="p_count">—</span>
+        </div>
+        <div class="profile-line">
+          <span class="k"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>آخرین اتصال</span>
+          <span class="v" id="p_lastonline">—</span>
+        </div>
+        <div class="profile-line">
+          <span class="k"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M3 9h18M8 3v4M16 3v4"/></svg>روزهای باقی‌مانده</span>
+          <span class="v" id="p_daysleft">—</span>
+        </div>
+        <div class="profile-qr-row">
+          <div class="profile-qr-box" id="profileQR"></div>
+        </div>
       </div>
     </div>
-    <div class="profile-actions">
-      <a class="qc-btn wide" id="btnRenew" href="https://t.me/VpnSafee_bot" target="_blank" rel="noopener">تمدید اشتراک</a>
-      <button class="qc-btn wide" id="btnCopySubLink" style="background:var(--panel-2);border-color:var(--line);">کپی لینک اشتراک</button>
+    <div class="page-footer">
+      <div class="profile-actions">
+        <a class="qc-btn wide" id="btnRenew" href="https://t.me/VpnSafee_bot" target="_blank" rel="noopener">تمدید اشتراک</a>
+        <button class="qc-btn wide" id="btnCopySubLink" style="background:var(--panel-2);border-color:var(--line);">کپی لینک اشتراک</button>
+      </div>
     </div>
   </section>
 
@@ -625,8 +644,9 @@ function pingHost(host, port, chipEl){
   function finish(){
     clearTimeout(timeout);
     var ms = Math.round(performance.now()-t0);
-    chipEl.textContent = Math.max(1, Math.round(ms * 0.7)) + ' ms';
-    chipEl.className = 'ping-chip ' + (ms<150?'good':(ms<400?'warn':'bad'));
+    var halfMs = Math.max(1, Math.round(ms * 0.5));
+    chipEl.textContent = halfMs + ' ms';
+    chipEl.className = 'ping-chip ' + (halfMs<75?'good':(halfMs<200?'warn':'bad'));
   }
 }
 
@@ -695,13 +715,12 @@ var APPS = {
   ios: [
     { name:'V2Box', tag:'پیشنهادی', icon:'📦', url:'https://apps.apple.com/app/v2box-v2ray-client/id6446814690' },
     { name:'Streisand', icon:'🍏', url:'https://apps.apple.com/app/streisand/id6450534064' },
-    { name:'Happ', icon:'🚀', url:'https://github.com/cloudflare/happ/releases' },
+    { name:'Happ', icon:'🚀', url:'https://apps.apple.com/app/happ-connect/id1661069076' },
     { name:'Hiddify Next', icon:'🛡️', url:'https://hiddify.com/download/' }
   ],
   desktop: [
     { name:'v2rayN', icon:'🖥️', url:'https://github.com/2dust/v2rayN/releases' },
     { name:'Hiddify Next', icon:'🛡️', url:'https://hiddify.com/download/' },
-    { name:'Happ', icon:'🚀', url:'https://github.com/cloudflare/happ/releases' },
     { name:'NekoRay / sing-box', icon:'📦', url:'https://github.com/MatsuriDayo/nekoray/releases' }
   ]
 };
