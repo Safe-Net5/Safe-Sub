@@ -73,7 +73,7 @@ Support Username: SafeVpn5
 2. به بخش **Panel Settings** بروید. ( تنظیمات پنل )
 3. در قسمت **Subscription**  بروید. ( سابسکریپشن )
 4. در نوار بالا گزیمه **profile** بروید. ( پروفایل ) 
-5. و این نوشته زیر را قرار دهید 
+5. در قسمت **Custom Path** مسیر زیر را وارد کنید:( مسیر سفارشی ) 
 
 ```text
 /usr/local/x-ui/sub_templates/Safe-Sub
