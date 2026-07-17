@@ -51,10 +51,27 @@ echo "   Installing Safe-Sub..."
 echo "=================================="
 echo
 
-read -p "Brand Name: " BRAND
-read -p "Bot Username (without @): " BOT
-read -p "Channel Username (without @): " CHANNEL
-read -p "Support Username (without @): " SUPPORT
+# تابع برای خواندن ورودی با محافظت
+read_input() {
+    local prompt="$1"
+    local var_name="$2"
+    local input=""
+    
+    while [ -z "$input" ]; do
+        echo -n "$prompt"
+        read -e input
+        if [ -z "$input" ]; then
+            echo "⚠️ This field cannot be empty. Please try again."
+        fi
+    done
+    
+    eval "$var_name=\"$input\""
+}
+
+read_input "Brand Name: " BRAND
+read_input "Bot Username (without @): " BOT
+read_input "Channel Username (without @): " CHANNEL
+read_input "Support Username (without @): " SUPPORT
 
 TEMPLATE_PATH="/usr/local/x-ui/sub_templates/Safe-Sub"
 
