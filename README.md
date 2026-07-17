@@ -7,8 +7,7 @@
 ## ✨ پیش‌نمایش
 
 
-https://github.com/Safe-Net5/Safe-Sub/blob/main/preview.png
-
+![Preview](https://raw.githubusercontent.com/Safe-Net5/Safe-Sub/main/preview.png)
 </div>
 
 
