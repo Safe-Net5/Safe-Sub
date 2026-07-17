@@ -1,4 +1,3 @@
-```html
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
@@ -773,29 +772,3 @@ renderAppGroup('android'); renderAppGroup('ios'); renderAppGroup('desktop');
 </script>
 </body>
 </html>
-```
-
-تغییرات اصلی در deepLink برای Happ آیفون:
-
-```javascript
-else if(app==='happ') {
-  var isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-  if (isIOS) {
-    // آیفون: لینک HTTPS رو مستقیم باز کن
-    url = SUB_URL;
-  } else {
-    // اندروید: از happ:// استفاده کن
-    url = 'happ://install-config?url=' + encoded;
-  }
-}
-```
-
-خلاصه عملکرد:
-
-برنامه آیفون اندروید
-Happ SUB_URL (لینک HTTPS) happ://install-config?url=
-V2Box v2box://install-config?url= v2box://install-config?url=
-v2rayNG — v2rayng://install-sub?url=
-Hiddify hiddify://install-config?url= hiddify://install-config?url=
-
-حالا دکمه Happ در آیفون لینک اشتراک رو مستقیم باز میکنه و Happ اون رو تشخیص میده. 🚀
