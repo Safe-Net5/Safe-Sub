@@ -539,6 +539,8 @@ function renderQR(text, containerId){
   el.innerHTML="";
   new QRCode(el, { text:text, width:containerId==='profileQR'?80:200, height:containerId==='profileQR'?80:200, colorDark:"#0d0b1a", colorLight:"#ffffff" });
 }
+
+// مطمئن‌ترین روش برای Happ آیفون
 function deepLink(app){
   var encoded = encodeURIComponent(SUB_URL);
   var name = encodeURIComponent("Safe.Vpn");
@@ -553,7 +555,19 @@ function deepLink(app){
   else if(app==='happ') {
     var isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
     if (isIOS) {
-      url = SUB_URL;
+      // روش اول: happ://subscribe
+      try {
+        url = 'happ://subscribe?url=' + encoded;
+        window.location.href = url;
+        // اگه باز نشد، بعد 2 ثانیه لینک رو کپی کن
+        setTimeout(function(){
+          copyText(SUB_URL, 'لینک اشتراک کپی شد! لطفاً در Happ گزینه Add Subscription رو بزنید.');
+        }, 2000);
+        return;
+      } catch(e) {
+        copyText(SUB_URL, 'لینک اشتراک کپی شد! لطفاً در Happ گزینه Add Subscription رو بزنید.');
+        return;
+      }
     } else {
       url = 'happ://install-config?url=' + encoded;
     }
