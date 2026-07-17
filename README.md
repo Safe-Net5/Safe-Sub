@@ -70,8 +70,10 @@ Support Username: SafeVpn5
 پس از پایان نصب:
 
 1. وارد پنل **3x-ui** شوید.
-2. به بخش **Subscription Settings** بروید.
-3. در قسمت **Custom Path** مسیر زیر را وارد کنید:
+2. به بخش **Panel Settings** بروید. ( تنظیمات پنل )
+3. در قسمت **Subscription**  بروید. ( سابسکریپشن )
+4. در نوار بالا گزیمه **profile** بروید. ( پروفایل ) 
+5. و این نوشته زیر را قرار دهید 
 
 ```text
 /usr/local/x-ui/sub_templates/Safe-Sub
