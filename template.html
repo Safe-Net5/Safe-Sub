@@ -543,11 +543,27 @@ function deepLink(app){
   var encoded = encodeURIComponent(SUB_URL);
   var name = encodeURIComponent("Safe.Vpn");
   var url;
-  if(app==='v2box')        url = 'v2box://install-config?url=' + encoded;
-  else if(app==='v2rayng') url = 'v2rayng://install-sub?url=' + encoded + '&name=' + name;
-  else if(app==='happ')    url = 'happ://install-config?url=' + encoded;
-  else if(app==='hiddify') url = 'hiddify://install-config?url=' + encoded;
+  
+  if(app==='v2box') {
+    url = 'v2box://install-config?url=' + encoded;
+  } 
+  else if(app==='v2rayng') {
+    url = 'v2rayng://install-sub?url=' + encoded + '&name=' + name;
+  } 
+  else if(app==='happ') {
+    // Happ - تشخیص آیفون و استفاده از subscribe
+    var isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+    if (isIOS) {
+      url = 'happ://subscribe?url=' + encoded;
+    } else {
+      url = 'happ://install-config?url=' + encoded;
+    }
+  } 
+  else if(app==='hiddify') {
+    url = 'hiddify://install-config?url=' + encoded;
+  } 
   else return;
+  
   window.location.href = url;
   toast('در حال باز کردن اپ... اگر نصب نیست، از بخش «برنامه» نصبش کنید');
 }
